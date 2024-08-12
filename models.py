@@ -30,6 +30,15 @@ class OpenAIChatModel(Model):
         if self.model_kwargs is None:
             self.model_kwargs = {}
 
+        llm_api_key = os.environ["OPENAI_API_KEY"]
+        javelin_api_key = os.environ['JAVELIN_API_KEY']
+        javelin_headers = {
+            "x-api-key": javelin_api_key, # API key from Javelin console
+        }
+        self.client = OpenAI(base_url = "https://api-dev.javelin.live/v1/query/myusers", # Dev environment
+                             api_key=llm_api_key,  # API key from OpenAI console
+                             default_headers=javelin_headers)
+
     @retry(delay=1, logger=logger, tries=5)
     def __call__(self, messages) -> str:
         completion = self.client.chat.completions.create(

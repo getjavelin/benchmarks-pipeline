@@ -74,7 +74,7 @@ if __name__ == "__main__":
         cache_data = json.load(open(cache_file, "r"))
 
     outputs = []
-    for question in tqdm.tqdm(data):
+    for question in tqdm.tqdm(data[:10]):
         success = False
 
         tries = 0
@@ -83,16 +83,20 @@ if __name__ == "__main__":
 
             messages_str = json.dumps(messages)
 
+            print("Messages: ", messages_str)
+
             if messages_str in cache_data:
                 completion = cache_data[messages_str]
+                print("Cache hit!")
             else:
+                print("Calling model...")
                 try:
                     completion = model(messages)
                 except Exception as e:
                     print("Model error: ", str(e))
                     completion = ""
                     success = False
-
+                
             success, output = prompt_creator.parse_output(completion)
 
             if success:
