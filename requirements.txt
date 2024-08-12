@@ -1,4 +1,4 @@
-transformers==4.34.0
+transformers==4.38.0
 accelerate==0.28.0
 pandas
 # These latter requirements are only necessary if you plan on using
